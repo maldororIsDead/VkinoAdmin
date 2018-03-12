@@ -2,37 +2,60 @@
     <section class="content">
         <div class="row">
             <div class="col-12">
+                <div class="nav-tabs-custom">
+                    <ul class="nav nav-tabs pull-right">
+                        <li class=""><a href="#tab_1-1" data-toggle="tab" aria-expanded="false">Русский</a></li>
+                        <li class="active"><a href="#tab_2-2" data-toggle="tab" aria-expanded="true">Украинский</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane" id="tab_1-1">
+                            <film-form :lang = lang[0]></film-form>
+                        </div>
+                        <!-- /.tab-pane -->
+                        <div class="tab-pane active" id="tab_2-2">
+                            <film-form :lang = lang[1]></film-form>
+                        </div>
+                    </div>
+                    <!-- /.tab-content -->
+                </div>
+            </div>
+        </div>
+    </section>
+  <!--  <section class="content">
+        <div class="row">
+            <div class="col-12">
                 <div class="box box-primary">
-                    <form role="form" v-on:submit.prevent="onSubmit">
+                    <film-form></film-form>
+            <!--        <form role="form" v-on:submit.prevent="onSubmit">
                         <div class="box-body">
                             <div class="form-group">
                                 <label>Название фильма</label>
-                                <input type="text" class="form-control" v-model="info.title"
+                                <input type="text" class="form-control" v-model="movie.title"
                                        placeholder="Название фильма" required>
                             </div>
                             <div class="form-group">
                                 <label>Описание</label>
-                                <textarea class="form-control" rows="3" placeholder="текст" v-model="info.description"
+                                <textarea class="form-control" rows="3" placeholder="текст" v-model="movie.description"
                                           required></textarea>
                             </div>
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-12 col-md-2">Главная картинка</div>
                                     <div class="col-12 col-md-3">
-                                        <file-uploader :image="info.src"></file-uploader>
+                                        <file-uploader :image="movie.src"></file-uploader>
                                     </div>
-                                <!--    <div class="col-12 col-md-3" v-if="!info.src">
+                                <!--    <div class="col-12 col-md-3" v-if="!movie.src">
                                         <img class="no-image" src="src/assets/no-image-icon.png" alt="no-image">
                                     </div>
                                     <div class="col-12" v-else>
-                                        <img :src="info.src"/>
+                                        <img :src="movie.src"/>
                                     </div>
                                     <div class="col-12 col-md-6 movies-btn_group">
                                         <label for="file" class="btn btn-primary">загрузить фото</label>
                                         <input type="file" id="file" style="visibility:hidden;" @change="onFileChange">
                                         <button class="btn btn-default" @click="removeImage">Удалить</button>
                                     </div>-->
-                                </div>
+                    <!--            </div>
                             </div>
                             <div class="form-group">
                                 <div class="row">
@@ -60,7 +83,7 @@
                             <div class="form-group">
                                 <label>Ссылка на трейлер</label>
                                 <input type="text" class="form-control" placeholder="Ссылка на видео в youtube"
-                                       v-model="info.youtube" required>
+                                       v-model="movie.youtube" required>
                             </div>
                             <div class="form-group">
                                 <label>Тип кино</label>
@@ -101,23 +124,42 @@
                                 <button type="button" class="btn btn-primary">Вернуть базовую версию</button>
                             </div>
                         </div>
-                    </form>
-                </div>
+                    </form> -->
+        <!--        </div>
             </div>
         </div>
-    </section>
+    </section>-->
 </template>
 
 <script>
     import FileUploader from './elements/FileUploader';
+    import FilmForm from './elements/FilmForm';
 
     export default {
         name: "movie-page",
         data() {
             return {
+                lang: [
+                    {
+                        movieName: "Название фильма",
+                        description: "Описание",
+                        mainPic: "Главная картинка",
+                        galleryPic: "Галерея картинок",
+                        picSize: "Размер 1000x190",
+                        videoLink: "Ссылка на трейлер"
+                    },
+                    {
+                        movieName: "Назва фільму",
+                        description: "Опис",
+                        mainPic: "Головне зображення",
+                        galleryPic: "Галерея зображень",
+                        picSize: "Розмір 1000х190",
+                        videoLink: "Посилання на трейлер"
+                    },
+                ],
                 image: '',
                 mainImage: null,
-                info: {
+                movie: {
                     title: '',
                     description: '',
                     src: '',
@@ -136,13 +178,13 @@
         methods: {
             onSubmit() {
                 alert(1);
-                let data = JSON.stringify(this.info);
+                let data = JSON.stringify(this.movie);
                 console.log(data);
             },
             addMainPic(event) {
                 console.log(event);
-                this.info.src = event;
-                console.log(this.info.src);
+                this.movie.src = event;
+                console.log(this.movie.src);
             },
             onFileChange(e) {
                 let files = e.target.files || e.dataTransfer.files;
@@ -166,21 +208,26 @@
                 reader.onload = (e) => {
                     vm.image = e.target.result;
                     //   vm.image = e.target.result;
-                    // console.log(vm.info.posters);
+                    // console.log(vm.movie.posters);
                 };
                 reader.readAsDataURL(file);
             },
             removeImage: function (e) {
-                this.info.src = '';
+                this.movie.src = '';
             }
         },
         components: {
-            FileUploader
+            FileUploader,
+            FilmForm
         }
     }
 </script>
 
 <style scoped>
+    .tab-content {
+        min-height: 1100px;
+    }
+
     .form-group img {
         width: 30%;
         margin: auto;

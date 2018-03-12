@@ -2,23 +2,10 @@
     <form role="form" v-on:submit.prevent="onSubmit">
         <div class="col-12 col-md-6">
             <div class="row">
-                <div class="col-6 col-md-4">{{lang.newsName}}</div>
+                <div class="col-6 col-md-4">{{lang.movieName}}</div>
                 <div class="col-6  col-md-8">
-                    <input type="text" class="form-control" v-model="item.title"
-                           placeholder="Название новости" required>
-                </div>
-            </div>
-        </div>
-        <div class="col-12 col-md-6">
-            <div class="row">
-                <div class="col-6 col-md-4">{{ lang.publishDate }}</div>
-                <div class="col-6 col-md-8 ">
-                    <div class="input-group date">
-                        <div class="input-group-addon">
-                            <i class="fa fa-calendar"></i>
-                        </div>
-                        <input type="text" class="form-control pull-right" id="datepicker">
-                    </div>
+                    <input type="text" class="form-control" v-model="movie.title"
+                           :placeholder="lang.movieName" required>
                 </div>
             </div>
         </div>
@@ -26,7 +13,7 @@
             <div class="row">
                 <div class="col-12 col-md-2">{{ lang.description }}</div>
                 <div class="col-12 col-md-10">
-                    <textarea class="form-control" rows="3" placeholder="текст" v-model="item.description"
+                    <textarea class="form-control" rows="3" placeholder="текст" v-model="movie.description"
                               required></textarea>
                 </div>
             </div>
@@ -34,11 +21,11 @@
         <div class="col-12 col-md-12">
             <div class="row">
                 <div class="col-12 col-md-2">{{ lang.mainPic }}</div>
-                <div class="col-12 col-md-3" v-if="!item.src">
+                <div class="col-12 col-md-3" v-if="!movie.src">
                     <img class="news-img no-image" src="src/assets/no-image-icon.png" alt="no-image">
                 </div>
                 <div class="col-12" v-else>
-                    <img class="news-img" :src="item.src"/>
+                    <img class="news-img" :src="movie.src"/>
                 </div>
                 <div class="col-8 col-md-6 movies-btn_group">
                     <label for="file" class="btn btn-primary">загрузить фото</label>
@@ -75,7 +62,30 @@
                 <div class="col-12 col-md-2">{{ lang.videoLink }}</div>
                 <div class="col-12 col-md-10">
                     <input type="text" class="form-control" placeholder="Ссылка на видео в youtube"
-                           v-model="item.youtube">
+                           v-model="movie.youtube">
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6">
+            <div class="row">
+                <div class="col-12 col-md-3">Тип кино</div>
+                <div class="col-6 col-md-3">
+                    <label>
+                        <input type="checkbox" class="minimal-red">
+                        3D
+                    </label>
+                </div>
+                <div class="col-6 col-md-3">
+                    <label>
+                        <input type="checkbox" class="minimal-red" checked>
+                        2D
+                    </label>
+                </div>
+                <div class="col-6 col-md-3">
+                    <label>
+                        <input type="checkbox" class="minimal-red">
+                        IMAX
+                    </label>
                 </div>
             </div>
         </div>
@@ -89,7 +99,7 @@
                                 <div>URL</div>
                             </div>
                             <div class="col-10 col-md-11">
-                                <input type="text" class="form-control" v-model="item.seo.url"
+                                <input type="text" class="form-control" v-model="movie.seo.url"
                                        placeholder="URL">
                             </div>
                         </div>
@@ -100,7 +110,7 @@
                                 <div>Title</div>
                             </div>
                             <div class="col-10 col-md-11">
-                                <input type="text" class="form-control" v-model="item.seo.title"
+                                <input type="text" class="form-control" v-model="movie.seo.title"
                                        placeholder="Title">
                             </div>
                         </div>
@@ -111,7 +121,7 @@
                                 <div>Keywords</div>
                             </div>
                             <div class="col-10 col-md-11">
-                                <input type="text" class="form-control" v-model="item.seo.keywords"
+                                <input type="text" class="form-control" v-model="movie.seo.keywords"
                                        placeholder="Title">
                             </div>
                         </div>
@@ -122,18 +132,20 @@
                                 <div>Description</div>
                             </div>
                             <div class="col-10 col-md-11">
-                                <textarea class="form-control" rows="3" v-model="item.seo.description"
+                                <textarea class="form-control" rows="3" v-model="movie.seo.description"
                                           placeholder="Description"></textarea>
                             </div>
                         </div>
                     </div>
-                    <div class="form-group btn-submit">
-                        <button type="submit" class="btn btn-default">Сохранить</button>
-                    </div>
                 </div>
             </div>
         </div>
-
+        <div class="col-12 col-md-12">
+            <div class="form-group btn-submit">
+                <button type="submit" class="btn btn-default">Сохранить</button>
+                <button type="button" class="btn btn-primary">Вернуть базовую версию</button>
+            </div>
+        </div>
     </form>
 </template>
 
@@ -143,14 +155,16 @@
 
     export default {
         props: ['lang'],
-        name: "news-form",
+        name: "film-form",
         data() {
             return {
-                item: {
+                image: '',
+                mainImage: null,
+                movie: {
                     title: '',
                     description: '',
                     src: '',
-                    posters: [],
+                    posters: ['', '', '', '', '', ''],
                     youtube: '',
                     format: [],
                     seo: {
@@ -159,21 +173,48 @@
                         keywords: '',
                         description: ''
                     }
-                },
-                computed: {
-                    ...mapGetters([
-                        'news'
-                    ]),
                 }
             }
         },
         methods: {
             onSubmit() {
                 alert(1);
-                console.log(this.news);
-                let data = JSON.stringify(this.item);
-                this.news.push(data);
-                console.log(this.news);
+                let data = JSON.stringify(this.movie);
+                console.log(data);
+            },
+            addMainPic(event) {
+                console.log(event);
+                this.info.src = event;
+                console.log(this.info.src);
+            },
+            onFileChange(e) {
+                let files = e.target.files || e.dataTransfer.files;
+                if (!files.length)
+                    return;
+                this.createImage(files[0]);
+            },
+            onPosterFilesChange(e, index) {
+                let files = e.target.files || e.dataTransfer.files;
+                if (!files.length)
+                    return;
+                this.createImage(files[0], index);
+            },
+            createImage(file, index) {
+                console.log(file);
+                alert(index);
+                let image = new Image();
+                let reader = new FileReader();
+                let vm = this;
+
+                reader.onload = (e) => {
+                    vm.image = e.target.result;
+                    //   vm.image = e.target.result;
+                    // console.log(vm.info.posters);
+                };
+                reader.readAsDataURL(file);
+            },
+            removeImage: function (e) {
+                this.info.src = '';
             }
         },
         components: {
@@ -183,10 +224,10 @@
 </script>
 
 <style scoped>
-
     div {
-        margin: 0.4rem 0;
+        margin-bottom: 0.8rem;
     }
+
     .news-img {
         max-height: 100px;
         width: auto;
@@ -201,7 +242,7 @@
 
     .btn-submit {
         display: flex;
-        justify-content: center;
+        justify-content: space-around;
         margin: 2rem;
     }
 
