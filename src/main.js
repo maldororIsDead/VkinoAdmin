@@ -2,8 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import VueRouter from 'vue-router'
 import VueResource from 'vue-resource'
-import $ from 'jquery'
-import 'bootstrap'
+
 import {store} from './store/'
 
 Vue.use(VueRouter)
