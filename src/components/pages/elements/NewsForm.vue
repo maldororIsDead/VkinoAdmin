@@ -1,8 +1,8 @@
 <template>
-    <form role="form" v-on:submit.prevent="onSubmit">
+    <form role="form" v-on:submit.prevent="onSubmitNews">
         <div class="col-12 col-md-6">
             <div class="row">
-                <div class="col-6 col-md-4">{{lang.newsName}}</div>
+                <div class="col-6 col-md-4">{{ lang.newsName }}</div>
                 <div class="col-6  col-md-8">
                     <input type="text" class="form-control" v-model="item.title"
                            placeholder="Название новости" required>
@@ -26,7 +26,7 @@
             <div class="row">
                 <div class="col-12 col-md-2">{{ lang.description }}</div>
                 <div class="col-12 col-md-10">
-                    <textarea class="form-control" rows="3" placeholder="текст" v-model="item.description"
+                    <textarea class="form-control" rows="3" placeholder="текст" v-model="item.text"
                               required></textarea>
                 </div>
             </div>
@@ -34,11 +34,11 @@
         <div class="col-12 col-md-12">
             <div class="row">
                 <div class="col-12 col-md-2">{{ lang.mainPic }}</div>
-                <div class="col-12 col-md-3" v-if="!item.src">
+                <div class="col-12 col-md-3" v-if="!item.img">
                     <img class="news-img no-image" src="src/assets/no-image-icon.png" alt="no-image">
                 </div>
                 <div class="col-12" v-else>
-                    <img class="news-img" :src="item.src"/>
+                    <img class="news-img" :src="item.img"/>
                 </div>
                 <div class="col-8 col-md-6 movies-btn_group">
                     <label for="file" class="btn btn-primary">загрузить фото</label>
@@ -138,8 +138,9 @@
 </template>
 
 <script>
-    import FileUploader from './FileUploader';
     import {mapGetters} from 'vuex';
+    import FileUploader from './FileUploader';
+
 
     export default {
         props: ['lang'],
@@ -148,32 +149,33 @@
             return {
                 item: {
                     title: '',
-                    description: '',
-                    src: '',
+                    text: '',
+                    img: '',
                     posters: [],
                     youtube: '',
-                    format: [],
                     seo: {
                         url: '',
                         title: '',
                         keywords: '',
                         description: ''
                     }
-                },
-                computed: {
-                    ...mapGetters([
-                        'news'
-                    ]),
                 }
             }
         },
+        computed: {
+            ...mapGetters([
+                'news'
+            ])
+        },
         methods: {
-            onSubmit() {
-                alert(1);
-                console.log(this.news);
+            onSubmitNews() {
                 let data = JSON.stringify(this.item);
-                this.news.push(data);
-                console.log(this.news);
+                this.$http.post('/api', data).then(function (response) {
+                    console.log('Фильм добавлен:', response.message);
+                }, function (response) {
+                    console.log('Соединение не удалось', response.data);
+                    this.$store.commit('createNewsStorage', data);
+                });
             }
         },
         components: {

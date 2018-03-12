@@ -2,7 +2,7 @@
     <form role="form" v-on:submit.prevent="onSubmit">
         <div class="col-12 col-md-6">
             <div class="row">
-                <div class="col-6 col-md-4">{{lang.movieName}}</div>
+                <div class="col-6 col-md-4">{{ lang.movieName }}</div>
                 <div class="col-6  col-md-8">
                     <input type="text" class="form-control" v-model="movie.title"
                            :placeholder="lang.movieName" required>
@@ -21,11 +21,11 @@
         <div class="col-12 col-md-12">
             <div class="row">
                 <div class="col-12 col-md-2">{{ lang.mainPic }}</div>
-                <div class="col-12 col-md-3" v-if="!movie.src">
+                <div class="col-12 col-md-3" v-if="!movie.img">
                     <img class="news-img no-image" src="src/assets/no-image-icon.png" alt="no-image">
                 </div>
                 <div class="col-12" v-else>
-                    <img class="news-img" :src="movie.src"/>
+                    <img class="news-img" :src="movie.img"/>
                 </div>
                 <div class="col-8 col-md-6 movies-btn_group">
                     <label for="file" class="btn btn-primary">загрузить фото</label>
@@ -71,19 +71,19 @@
                 <div class="col-12 col-md-3">Тип кино</div>
                 <div class="col-6 col-md-3">
                     <label>
-                        <input type="checkbox" class="minimal-red">
+                        <input type="checkbox" v-model="movie.format" value="3D" class="minimal-red">
                         3D
                     </label>
                 </div>
                 <div class="col-6 col-md-3">
                     <label>
-                        <input type="checkbox" class="minimal-red" checked>
+                        <input type="checkbox" v-model="movie.format" value="2D" class="minimal-red" checked>
                         2D
                     </label>
                 </div>
                 <div class="col-6 col-md-3">
                     <label>
-                        <input type="checkbox" class="minimal-red">
+                        <input type="checkbox" v-model="movie.format" value="IMAX" class="minimal-red">
                         IMAX
                     </label>
                 </div>
@@ -158,8 +158,6 @@
         name: "film-form",
         data() {
             return {
-                image: '',
-                mainImage: null,
                 movie: {
                     title: '',
                     description: '',
@@ -176,16 +174,20 @@
                 }
             }
         },
+        computed: {
+            ...mapGetters([
+                'news',
+                'movies'
+            ])
+        },
         methods: {
             onSubmit() {
-                alert(1);
                 let data = JSON.stringify(this.movie);
-                console.log(data);
-            },
-            addMainPic(event) {
-                console.log(event);
-                this.info.src = event;
-                console.log(this.info.src);
+                this.$http.post('/api', data).then(function (response) {
+                    console.log('Фильм добавлен:', response.message);
+                }, function (response) {
+                    console.log('Соединение не удалось', response.data);
+                });
             },
             onFileChange(e) {
                 let files = e.target.files || e.dataTransfer.files;
@@ -193,28 +195,17 @@
                     return;
                 this.createImage(files[0]);
             },
-            onPosterFilesChange(e, index) {
-                let files = e.target.files || e.dataTransfer.files;
-                if (!files.length)
-                    return;
-                this.createImage(files[0], index);
-            },
-            createImage(file, index) {
-                console.log(file);
-                alert(index);
+            createImage(file) {
                 let image = new Image();
                 let reader = new FileReader();
-                let vm = this;
 
                 reader.onload = (e) => {
-                    vm.image = e.target.result;
-                    //   vm.image = e.target.result;
-                    // console.log(vm.info.posters);
+                    this.image = e.target.result;
                 };
                 reader.readAsDataURL(file);
             },
             removeImage: function (e) {
-                this.info.src = '';
+                this.image = '';
             }
         },
         components: {

@@ -5,7 +5,7 @@
         <section class="sidebar">
             <!-- sidebar menu: : style can be found in sidebar.less -->
             <ul class="sidebar-menu" data-widget="tree">
-                <li class="header">MAIN NAVIGATION</li>
+                <li class="header"></li>
                 <li class="active treeview">
                     <a href="index.html">
                         <i class="fa fa-pie-chart"></i>
@@ -15,7 +15,7 @@
                 </li>
                 <li class="treeview">
                     <a href="№">
-                        <i class="fa fa-pie-chart"></i>
+                        <i class="fa fa-chevron-circle-left"></i>
                         <span>Баннера/Слайдеры</span>
                         <span class="pull-right-container"></span>
                     </a>
@@ -58,7 +58,10 @@
             </span>
                     </router-link>
                     <ul class="treeview-menu">
-                        <li><router-link to="/news/news-page"><i class="fa fa-circle-o"></i>Страница новости</router-link></li>
+                        <li>
+                            <router-link to="/news/news-page"><i class="fa fa-circle-o"></i>Страница новости
+                            </router-link>
+                        </li>
                     </ul>
                 </li>
                 <li class="treeview">

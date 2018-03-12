@@ -13,11 +13,11 @@
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane" id="tab_1-1">
-                            <news-form :lang = lang[0]></news-form>
+                            <news-form :lang=lang[0] @newsinfo="getInfoNews"></news-form>
                         </div>
                         <!-- /.tab-pane -->
                         <div class="tab-pane active" id="tab_2-2">
-                            <news-form :lang = lang[1]></news-form>
+                            <news-form :lang=lang[1]></news-form>
                         </div>
                     </div>
                     <!-- /.tab-content -->
@@ -28,8 +28,10 @@
 </template>
 
 <script>
+    import {mapGetters} from 'vuex';
     import NewsForm from './elements/NewsForm';
     import News from "./News";
+
     export default {
         name: "news-page",
         data() {
@@ -54,15 +56,14 @@
                         videoLink: "Посилання на відео"
                     },
                 ]
-
             }
         },
-        methods: {
-            onSubmit() {
-                alert(1);
-                let data = JSON.stringify(this.item);
-                console.log(data);
-            }
+        computed: {
+            ...mapGetters([
+                'news',
+                'movies',
+                'arr'
+            ])
         },
         components: {
             News,
@@ -75,18 +76,21 @@
     .tab-content {
         min-height: 1100px;
     }
+
     .checkbox {
         position: absolute;
         z-index: -1;
         opacity: 0;
         margin: 10px 0 0 20px;
     }
+
     .checkbox + label {
         position: relative;
         padding: 0 0 0 60px;
         cursor: pointer;
         font-weight: normal;
     }
+
     .checkbox + label:before {
         content: '';
         position: absolute;

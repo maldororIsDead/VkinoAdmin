@@ -16,16 +16,17 @@ import Statistic from './components/pages/Statistic'
 
 let router = new VueRouter({
     routes: [
-        { path: '/', component: Statistic },
-        { path: '/movies', component: Movies },
-        { path: '/movies/movie-page', component: MoviePage },
-        { path: '/news', component: News },
-        { path: '/news/news-page', component: NewsPage },
+        {path: '/', component: Statistic},
+        {path: '/movies', component: Movies},
+        {path: '/movies/movie-page', component: MoviePage},
+        {path: '/news', component: News},
+        {path: '/news/news-page', component: NewsPage},
     ]
 })
+
 new Vue({
-  el: '#app',
-  render: h => h(App),
+    el: '#app',
+    render: h => h(App),
     store,
     router
 })

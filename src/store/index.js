@@ -6,8 +6,11 @@ Vue.use(Vuex);
 
 export const store = new Vuex.Store({
     state: {
-        movies : require('./movies.json'),
-        news: require('./news.json'),
+        movies: [],
+        news: [],
+   /*     movies : require('./movies.json'),
+        news: require('./news.json'),*/
+        arr : "store"
     },
     getters: {
         movies(state) {
@@ -15,10 +18,21 @@ export const store = new Vuex.Store({
         },
         news(state) {
             return state.news;
+        },
+        arr(state) {
+            return state.arr;
         }
     },
     mutations: {
-
+        createMovieStorage(state, payload) {
+            state.movies = payload;
+        },
+        createNewsStorage(state, payload) {
+            state.news = payload;
+        },
+        addNewsToStorage(state, payload) {
+            state.news.push(payload);
+        }
     },
     actions: {
 

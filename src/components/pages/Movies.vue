@@ -1,32 +1,32 @@
 <template>
-        <section class="content poster-movies">
-            <h3 class="box-title">Cписок фильмов текущих</h3>
-            <div class="row poster-movies_list">
-                <div v-for="(movie, index) in moviesActual" class="movie-actual col-lg-3 col-xs-6">
-                    <div class="movie-img">
-                        <img :src="movie.src" :alt="movie.title">
-                    </div>
-                    <div class="movie-title">
-                        <router-link :to="{name: 'movie', params: {id: index}}">
-                            {{ movie.title }}
-                        </router-link>
-                    </div>
+    <section class="content poster-movies">
+        <h3 class="box-title">Cписок фильмов текущих</h3>
+        <div class="row poster-movies_list">
+            <div v-for="(movie, index) in moviesActual" class="movie-actual col-lg-3 col-xs-6">
+                <div class="movie-img">
+                    <img :src="movie.src" :alt="movie.title">
+                </div>
+                <div class="movie-title">
+                    <router-link :to="{name: 'movie', params: {id: index}}">
+                        {{ movie.title }}
+                    </router-link>
                 </div>
             </div>
-            <h3 class="box-title">Cписок фильмов которые покажут скоро</h3>
-            <div class="row poster-movies_list">
-                <div v-for="(movie, index) in moviesPremiere" class="movie-actual col-lg-3 col-xs-6">
-                    <div class="movie-img">
-                        <img :src="movie.src" :alt="movie.title">
-                    </div>
-                    <div class="movie-title">
-                        <router-link :to="{name: 'movie', params: {id: index}}">
-                            {{ movie.title }}
-                        </router-link>
-                    </div>
+        </div>
+        <h3 class="box-title">Cписок фильмов которые покажут скоро</h3>
+        <div class="row poster-movies_list">
+            <div v-for="(movie, index) in moviesPremiere" class="movie-actual col-lg-3 col-xs-6">
+                <div class="movie-img">
+                    <img :src="movie.src" :alt="movie.title">
+                </div>
+                <div class="movie-title">
+                    <router-link :to="{name: 'movie', params: {id: index}}">
+                        {{ movie.title }}
+                    </router-link>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 </template>
 
 <script>
@@ -60,10 +60,11 @@
         justify-content: center;
         margin-bottom: 2rem;
     }
+
     .movie-img img {
         width: 100%;
     }
-    
+
     .movie-title {
         margin: 1rem;
     }
@@ -73,7 +74,7 @@
         font-size: 1.6rem;
     }
 
-    @media only screen and (min-width : 480px) {
+    @media only screen and (min-width: 480px) {
         .movie-img img {
             width: auto;
             max-height: 325px;

@@ -5,8 +5,9 @@
                 <div class="box">
                     <div class="box-header">
                         <h3 class="box-title">Cписок новостей</h3>
-                        <button type="button" class="btn btn-default pull-right"><i class="fa fa-plus"></i> Создать Новость
-                        </button>
+                        <router-link to="/news/news-page"><button type="button" class="btn btn-default pull-right"><i class="fa fa-plus"></i> Создать
+                            Новость
+                        </button></router-link>
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
@@ -55,7 +56,7 @@
 </script>
 
 <style scoped>
-    .box-header>.fa, .box-header>.glyphicon, .box-header>.ion, .box-header .box-title {
+    .box-header > .fa, .box-header > .glyphicon, .box-header > .ion, .box-header .box-title {
         display: flex;
         justify-content: center;
     }

@@ -20,8 +20,7 @@
         name: "file-uploader",
         data() {
             return {
-                image: '',
-                localImg: ''
+                image: ''
             }
         },
         computed: {
@@ -42,9 +41,6 @@
 
                 reader.onload = (e) => {
                     this.image = e.target.result;
-                //    this.localImg = this.image;
-                   // console.log(this.localImg);
-                 //   this.$emit('update', this.localImg);
                 };
                 reader.readAsDataURL(file);
             },
@@ -56,6 +52,7 @@
 </script>
 
 <style scoped>
+
     .form-group img {
         width: 30%;
         margin: auto;
