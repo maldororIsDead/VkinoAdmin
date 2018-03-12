@@ -3,8 +3,6 @@ import App from './App.vue'
 import VueRouter from 'vue-router'
 import VueResource from 'vue-resource'
 
-import 'bootstrap'
-
 import {store} from './store/'
 
 Vue.use(VueRouter)
