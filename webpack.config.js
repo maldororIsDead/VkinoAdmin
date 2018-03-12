@@ -25,6 +25,10 @@ module.exports = {
           // other vue-loader options go here
         }
       },
+        {
+            test: /\.html$/,
+            use: ['html-loader']
+        },
       {
         test: /\.js$/,
         loader: 'babel-loader',
