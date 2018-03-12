@@ -1,0 +1,76 @@
+[
+  {
+    "id": 1,
+    "title": "Иллюзия обмана 2",
+    "src": "src/assets/movies/movie-1.jpg",
+    "rentalStatus": true,
+    "datePremiere": "04.06.2016",
+    "youtube": "<iframe width=\"100%\" height=\"100%\" src=\"https://www.youtube.com/embed/cipOTUO0CmU\" frameborder=\"0\" allow=\"autoplay; encrypted-media\" allowfullscreen></iframe>",
+    "description": "«4-ре всадника», команда наилучших иллюзионистов мира, опять в сборе! Их «мистика» стала еще абсолютнее, а враги — опаснее. На сей раз им светит спасти свою репутацию и вывести на чистую воду ожесточенного техномагната...",
+    "content": {
+      "year": "2016",
+      "country": "США, Китай, Великобритания, Канада",
+      "composer": "Клифф Мартинез",
+      "producers": "Сидони Дюма, Николас Виндинг Рефн, Венсан Мараваль",
+      "director": "Бобби Коэн",
+      "writers": "Николас Виндинг Рефн, Полли Стєнам, Мэри Лоус",
+      "operator": "Наташа Брайер",
+      "genre": "триллер, ужасы",
+      "budget": "7.00 млн USD",
+      "PG": "зрителям, достигшим 18 лет",
+      "time": "117 мин. / 1:57",
+      "posters": [
+        "src/assets/7/post-1.jpg",
+        "src/assets/7/post-2.jpg",
+        "src/assets/7/post-3.jpg",
+        "src/assets/7/post-4.jpg"
+      ]
+    }
+  },
+  {
+    "id": 2,
+    "title": "Ледниковый период: Курс на столкновение",
+    "src": "src/assets/movies/movie-2.jpg",
+    "rentalStatus": true
+  },
+  {
+    "id": 3,
+    "title": "Свадебный погром",
+    "src": "src/assets/movies/movie-3.jpg",
+    "rentalStatus": true
+  },
+  {
+    "id": 3,
+    "title": "Стартрек: За пределами Вселенной",
+    "src": "src/assets/movies/movie-4.jpg",
+    "rentalStatus": true
+  },
+  {
+    "id": 7,
+    "title": "Неоновый демон",
+    "src": "src/assets/movies/movie-7.jpeg",
+    "rentalStatus": false,
+    "datePremiere": "28.07.2016",
+    "youtube": "<iframe width=\"100%\" height=\"400px\" src=\"https://www.youtube.com/embed/cipOTUO0CmU\" frameborder=\"0\" allow=\"autoplay; encrypted-media\" allowfullscreen></iframe>",
+    "description": "Красочный психологический триллер от обладателя премии Каннского кинофестиваля и автора \"Только Бог простит' с Райаном Гослингом и “Бронсон\" с Томом Харди. Начинающая модель переезжает в Лос-Анджелес. На своей первой фотосессии Джесси (Элль Фаннинг) знакомится с работниками фэшн-индустрии: Руби (Джена Мэлоун),Сарой (Эбби Ли) и Джиджи (Белла Хиткот). Вскоре молодая девушка подписываетконтракт с модельным агентством. Джесси любят фотографы и обожают дизайнеры, ей завидуют, а ее молодость и красоту боготворят. Но по зубам ли девушке мир вспышек и искусственных эмоций, в котором хищники не щадят своих жертв.",
+    "content": {
+      "year": "2016",
+      "country": "США, Франция, Дания",
+      "composer": "Клифф Мартинез",
+      "producers": "Сидони Дюма, Николас Виндинг Рефн, Венсан Мараваль",
+      "director": "Николас Виндинг Рефн",
+      "writers": "Николас Виндинг Рефн, Полли Стєнам, Мэри Лоус",
+      "operator": "Наташа Брайер",
+      "genre": "триллер, ужасы",
+      "budget": "7.00 млн USD",
+      "PG": "зрителям, достигшим 18 лет",
+      "time": "117 мин. / 1:57",
+      "posters": [
+        "src/assets/7/post-1.jpg",
+        "src/assets/7/post-2.jpg",
+        "src/assets/7/post-3.jpg",
+        "src/assets/7/post-4.jpg"
+      ]
+    }
+  }
+]
