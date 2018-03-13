@@ -22,12 +22,12 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr v-for="item in news">
+                            <tr v-for="(item, index) in JSON.parse(news)">
                                 <td>{{ item.title }}</td>
                                 <td>{{ item.date }}</td>
                                 <td>{{ (item.status === true) ? 'ВКЛ' : 'ВЫКЛ' }}</td>
-                                <td><i class="fa fa fa-pencil"></i></td>
-                                <td><i class="fa fa-trash-o"></i></td>
+                                <td><router-link :to="{name: 'news', params: {id: index}}"><i class="fa fa fa-pencil"></i></router-link></td>
+                                <td @click="deleteItem(index)"><i class="fa fa-trash-o"></i></td>
                             </tr>
                             </tbody>
                         </table>
@@ -47,11 +47,27 @@
 
     export default {
         name: "news",
+        data() {
+            return {
+                newsView: ""
+            }
+        },
         computed: {
             ...mapGetters([
                 'news'
-            ])
-        }
+            ]),
+        },
+        methods: {
+            deleteItem(index) {
+                this.newsView = JSON.parse(this.news);
+                this.newsView.splice(index, 1);
+                let localNews = JSON.stringify(this.newsView);
+                localStorage.removeItem("news");
+                localStorage.setItem('news', localNews);
+                let newJSONnews =  localStorage.getItem('news');
+                this.$store.commit('createNewsStorage', newJSONnews);
+            }
+        },
     }
 </script>
 

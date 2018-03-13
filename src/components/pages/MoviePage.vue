@@ -9,11 +9,11 @@
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane" id="tab_1-1">
-                            <film-form :lang = lang[0]></film-form>
+                            <film-form :lang = lang[0] :movieData="movie"></film-form>
                         </div>
                         <!-- /.tab-pane -->
                         <div class="tab-pane active" id="tab_2-2">
-                            <film-form :lang = lang[1]></film-form>
+                            <film-form :lang = lang[1] :movieData="movie"></film-form>
                         </div>
                     </div>
                     <!-- /.tab-content -->
@@ -32,6 +32,8 @@
         name: "movie-page",
         data() {
             return {
+                movie: '',
+                mark: '',
                 lang: [
                     {
                         movieName: "Название фильма",
@@ -51,6 +53,19 @@
                     },
                 ]
             }
+        },
+        created() {
+            let movieId = this.$route.params.id;
+            for (let i = 0; i < this.movies.length; i++) {
+                if (this.movies[i].id === movieId) {
+                    this.movie = this.movies[i];
+                }
+            }
+        },
+        computed: {
+            ...mapGetters([
+                'movies'
+            ])
         },
         components: {
             FileUploader,

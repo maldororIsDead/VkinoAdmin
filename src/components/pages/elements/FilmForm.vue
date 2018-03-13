@@ -1,5 +1,5 @@
 <template>
-    <form role="form" v-on:submit.prevent="onSubmit">
+    <form role="form" v-on:submit="onSubmit">
         <div class="col-12 col-md-6">
             <div class="row">
                 <div class="col-6 col-md-4">{{ lang.movieName }}</div>
@@ -154,7 +154,7 @@
     import {mapGetters} from 'vuex';
 
     export default {
-        props: ['lang'],
+        props: ['lang', 'movieData'],
         name: "film-form",
         data() {
             return {
@@ -179,6 +179,15 @@
                 'news',
                 'movies'
             ])
+        },
+        created() {
+            if (this.movieData) {
+                this.movie.title = this.movieData.title;
+                this.movie.description = this.movieData.description;
+                this.movie.img = this.movieData.src;
+                this.movie.youtube = this.movieData.youtube;
+                this.movie.format = this.movieData.format;
+            }
         },
         methods: {
             onSubmit() {

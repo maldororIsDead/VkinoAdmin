@@ -19,8 +19,10 @@ let router = new VueRouter({
         {path: '/', component: Statistic},
         {path: '/movies', component: Movies},
         {path: '/movies/movie-page', component: MoviePage},
+        {path: '/movies/movie-page/:id', name: 'movie', component: MoviePage},
         {path: '/news', component: News},
         {path: '/news/news-page', component: NewsPage},
+        {path: '/news/news-page/:id', name: 'news', component: NewsPage}
     ]
 })
 

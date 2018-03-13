@@ -13,11 +13,11 @@
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane" id="tab_1-1">
-                            <news-form :lang=lang[0] @newsinfo="getInfoNews"></news-form>
+                            <news-form :lang=lang[0] :newsItem="newsItem"></news-form>
                         </div>
                         <!-- /.tab-pane -->
                         <div class="tab-pane active" id="tab_2-2">
-                            <news-form :lang=lang[1]></news-form>
+                            <news-form :lang=lang[1] :newsItem="newsItem"></news-form>
                         </div>
                     </div>
                     <!-- /.tab-content -->
@@ -36,6 +36,8 @@
         name: "news-page",
         data() {
             return {
+                newsEditArr : '',
+                newsItem: null,
                 lang: [
                     {
                         newsName: "Название новости",
@@ -58,11 +60,15 @@
                 ]
             }
         },
+        created() {
+            this.newsEditArr = JSON.parse(this.news);
+            let newsId = this.$route.params.id;
+            this.newsItem = this.newsEditArr[newsId];
+        },
         computed: {
             ...mapGetters([
                 'news',
-                'movies',
-                'arr'
+                'movies'
             ])
         },
         components: {

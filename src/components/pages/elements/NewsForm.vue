@@ -34,17 +34,20 @@
         <div class="col-12 col-md-12">
             <div class="row">
                 <div class="col-12 col-md-2">{{ lang.mainPic }}</div>
-                <div class="col-12 col-md-3" v-if="!item.img">
-                    <img class="news-img no-image" src="src/assets/no-image-icon.png" alt="no-image">
+                <div class="col-6 col-md-10 col-lg-2">
+                    <file-uploader></file-uploader>
                 </div>
-                <div class="col-12" v-else>
-                    <img class="news-img" :src="item.img"/>
-                </div>
-                <div class="col-8 col-md-6 movies-btn_group">
-                    <label for="file" class="btn btn-primary">загрузить фото</label>
-                    <input type="file" id="file" style="visibility:hidden;" @change="onFileChange">
-                    <button class="btn btn-default" @click="removeImage">Удалить</button>
-                </div>
+                <!--    <div class="col-12 col-md-3" v-if="!item.img">
+                        <img class="news-img no-image" src="src/assets/no-image-icon.png" alt="no-image">
+                    </div>
+                    <div class="col-12" v-else>
+                        <img class="news-img" :src="item.img"/>
+                    </div>
+                    <div class="col-8 col-md-6 movies-btn_group">
+                        <label for="file" class="btn btn-primary">загрузить фото</label>
+                        <input type="file" id="file" style="visibility:hidden;" @change="onFileChange">
+                        <button class="btn btn-default" @click="removeImage">Удалить</button>
+                    </div>-->
             </div>
         </div>
         <div class="col-12 col-md-12">
@@ -135,6 +138,7 @@
         </div>
 
     </form>
+
 </template>
 
 <script>
@@ -143,7 +147,7 @@
 
 
     export default {
-        props: ['lang'],
+        props: ['lang', 'newsItem'],
         name: "news-form",
         data() {
             return {
@@ -169,13 +173,32 @@
         },
         methods: {
             onSubmitNews() {
-                let data = JSON.stringify(this.item);
-                this.$http.post('/api', data).then(function (response) {
+                console.log(this.news);
+                let data = this.item;
+                let newsObj = JSON.parse(this.news);
+                newsObj.push(data);
+                let localNews = JSON.stringify(newsObj);
+                localStorage.removeItem("news");
+                localStorage.setItem('news', localNews);
+                let newJSONnews = localStorage.getItem('news');
+
+                this.$http.post('/api', newJSONnews).then(function (response) {
                     console.log('Фильм добавлен:', response.message);
                 }, function (response) {
                     console.log('Соединение не удалось', response.data);
-                    this.$store.commit('createNewsStorage', data);
+                    this.$store.commit('createNewsStorage', newJSONnews);
                 });
+            }
+        },
+        created() {
+            if (this.newsItem) {
+                this.item.title = this.newsItem.title;
+                this.item.text = this.newsItem.text;
+                this.item.img = this.newsItem.img;
+                this.item.youtube = this.newsItem.youtube;
+                this.item.status = this.newsItem.status;
+                this.item.seo.url = this.newsItem.seo.url;
+                this.item.seo.title = this.newsItem.seo.title;
             }
         },
         components: {
@@ -189,6 +212,7 @@
     div {
         margin: 0.4rem 0;
     }
+
     .news-img {
         max-height: 100px;
         width: auto;

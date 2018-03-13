@@ -43,7 +43,7 @@
         methods: {
             getMoviesJSON: function () {
                 //получение данных о фильмах и запись в локальное хранилище данных
-                this.$http.get('http://kino-teatr.ua:8081/services/api/film/48519?apiKey=pol1kh111').then(response => {
+                this.$http.get('http://kino-teatr.ua:8081/services/api/film/48519?apiKey=').then(response => {
                     let serverMovies = response.body;
                     if (localStorage.getItem('movies') !== null) {
                         localStorage.setItem('movies', JSON.stringify(serverMovies));
@@ -62,7 +62,7 @@
             },
             getNewsJSON: function () {
                 //получение данных с новостями
-                this.$http.get('http://kino-teatr.ua:8081/services/api/film/48519?apiKey=pol1kh111').then(response => {
+                this.$http.get('http://kino-teatr.ua:8081/services/api/film/48519?apiKey=').then(response => {
                     let serverNews = response.body;
                     if (localStorage.getItem('news') !== null) {
                         localStorage.setItem('news', JSON.stringify(serverNews));
@@ -70,20 +70,22 @@
                         localStorage.removeItem('news');
                         localStorage.setItem('news', JSON.stringify(serverNews));
                     }
-                    let localNews = localStorage.getItem('news');
-                    this.news = JSON.parse(localNews);
+                    this.news = localStorage.getItem('news');
                 }, function (error) {
                     console.log(error);
-                    let localNews = localStorage.getItem('news');
-                    this.news = JSON.parse(localNews);
+                    this.news = localStorage.getItem('news');
                     this.$store.commit('createNewsStorage', this.news);
                 })
             },
             getLocalAdminData() {
                 let serverMovies = require('./store/movies.json');
                 let serverNews = require('./store/news.json');
-                localStorage.setItem('movies', JSON.stringify(serverMovies));
-                localStorage.setItem('news', JSON.stringify(serverNews));
+                if (localStorage.getItem('movies') === null) {
+                    localStorage.setItem('movies', JSON.stringify(serverMovies));
+                }
+                if (localStorage.getItem('news') === null) {
+                    localStorage.setItem('news', JSON.stringify(serverNews));
+                }
             }
         },
         created() {
@@ -91,12 +93,6 @@
             this.getLocalAdminData();
             this.getMoviesJSON();
             this.getNewsJSON();
-        },
-        computed: {
-            ...mapGetters([
-                'news',
-                'movies'
-            ])
         },
         components: {
             AppHeader,

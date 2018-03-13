@@ -29,9 +29,6 @@ export const store = new Vuex.Store({
         },
         createNewsStorage(state, payload) {
             state.news = payload;
-        },
-        addNewsToStorage(state, payload) {
-            state.news.push(payload);
         }
     },
     actions: {

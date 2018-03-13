@@ -7,7 +7,7 @@
                     <img :src="movie.src" :alt="movie.title">
                 </div>
                 <div class="movie-title">
-                    <router-link :to="{name: 'movie', params: {id: index}}">
+                    <router-link :to="{name: 'movie', params: {id: movie.id}}">
                         {{ movie.title }}
                     </router-link>
                 </div>
@@ -20,7 +20,7 @@
                     <img :src="movie.src" :alt="movie.title">
                 </div>
                 <div class="movie-title">
-                    <router-link :to="{name: 'movie', params: {id: index}}">
+                    <router-link :to="{name: 'movie', params: {id: movie.id}}">
                         {{ movie.title }}
                     </router-link>
                 </div>
