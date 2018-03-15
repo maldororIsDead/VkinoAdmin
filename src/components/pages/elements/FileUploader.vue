@@ -1,3 +1,4 @@
+<!-- Компонент загрузки файла -->
 <template>
         <div class="form-group">
             <div v-if="!image">

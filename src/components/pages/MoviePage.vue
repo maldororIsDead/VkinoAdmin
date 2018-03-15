@@ -1,3 +1,4 @@
+<!-- Компонент отображения мультязычной страницы фильма -->
 <template>
     <section class="content">
         <div class="row">
@@ -9,11 +10,11 @@
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane" id="tab_1-1">
-                            <film-form :lang = lang[0] :movieData="movie"></film-form>
+                            <film-form :lang=lang[0] :movieData="movie"></film-form>
                         </div>
                         <!-- /.tab-pane -->
                         <div class="tab-pane active" id="tab_2-2">
-                            <film-form :lang = lang[1] :movieData="movie"></film-form>
+                            <film-form :lang=lang[1] :movieData="movie"></film-form>
                         </div>
                     </div>
                     <!-- /.tab-content -->
@@ -32,7 +33,10 @@
         name: "movie-page",
         data() {
             return {
-                movie: '',
+                movie: {
+                    id: '',
+                    info: ''
+                },
                 mark: '',
                 lang: [
                     {
@@ -55,10 +59,11 @@
             }
         },
         created() {
-            let movieId = this.$route.params.id;
+            //Получение данных из id фильма и их реактивная отправка в поля формы
+            this.movie.id = this.$route.params.id;
             for (let i = 0; i < this.movies.length; i++) {
-                if (this.movies[i].id === movieId) {
-                    this.movie = this.movies[i];
+                if (this.movies[i].id === this.movie.id) {
+                    this.movie.info = this.movies[i];
                 }
             }
         },

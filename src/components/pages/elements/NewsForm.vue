@@ -1,3 +1,4 @@
+<!-- Компонент Форма добавления и редактирования новости -->
 <template>
     <form role="form" v-on:submit.prevent="onSubmitNews">
         <div class="col-12 col-md-6">
@@ -5,7 +6,7 @@
                 <div class="col-6 col-md-4">{{ lang.newsName }}</div>
                 <div class="col-6  col-md-8">
                     <input type="text" class="form-control" v-model="item.title"
-                           placeholder="Название новости" required>
+                           :placeholder="lang.newsName" required>
                 </div>
             </div>
         </div>
@@ -13,12 +14,9 @@
             <div class="row">
                 <div class="col-6 col-md-4">{{ lang.publishDate }}</div>
                 <div class="col-6 col-md-8 ">
-                    <div class="input-group date">
-                        <div class="input-group-addon">
-                            <i class="fa fa-calendar"></i>
-                        </div>
-                        <input type="text" class="form-control pull-right" id="datepicker">
-                    </div>
+                    <date-picker v-model="date" lang="ru" format="dd.MM.yyyy"
+                                 :placeholder="(item.date) ? item.date : lang.date"
+                                 :first-day-of-week="1"></date-picker>
                 </div>
             </div>
         </div>
@@ -37,17 +35,6 @@
                 <div class="col-6 col-md-10 col-lg-2">
                     <file-uploader></file-uploader>
                 </div>
-                <!--    <div class="col-12 col-md-3" v-if="!item.img">
-                        <img class="news-img no-image" src="src/assets/no-image-icon.png" alt="no-image">
-                    </div>
-                    <div class="col-12" v-else>
-                        <img class="news-img" :src="item.img"/>
-                    </div>
-                    <div class="col-8 col-md-6 movies-btn_group">
-                        <label for="file" class="btn btn-primary">загрузить фото</label>
-                        <input type="file" id="file" style="visibility:hidden;" @change="onFileChange">
-                        <button class="btn btn-default" @click="removeImage">Удалить</button>
-                    </div>-->
             </div>
         </div>
         <div class="col-12 col-md-12">
@@ -136,25 +123,27 @@
                 </div>
             </div>
         </div>
-
     </form>
-
 </template>
 
 <script>
     import {mapGetters} from 'vuex';
     import FileUploader from './FileUploader';
-
+    import DatePicker from 'vue2-datepicker'
 
     export default {
         props: ['lang', 'newsItem'],
         name: "news-form",
         data() {
             return {
+                date: '',
                 item: {
+                    id: '',
                     title: '',
                     text: '',
                     img: '',
+                    date: '',
+                    status: '',
                     posters: [],
                     youtube: '',
                     seo: {
@@ -172,37 +161,61 @@
             ])
         },
         methods: {
-            onSubmitNews() {
-                console.log(this.news);
+            //Генерация тела запроса для формы
+            onSubmitNews(event) {
+
+                this.item.status = this.catchCheckbox();
+                this.item.date = this.date.toLocaleString("ru",
+                    {day: 'numeric', month: 'numeric', year: 'numeric'});
                 let data = this.item;
+
                 let newsObj = JSON.parse(this.news);
-                newsObj.push(data);
+                //Копируем глобальный массив из хранилища
+                if (this.item.id) {
+                    //Редактирование текущей новости
+                    newsObj.splice(this.item.id, 1, data);
+                } else {
+                    //Добавление новой новости
+                    newsObj.push(data);
+                }
+                //Преобразуем в JSON и перезаписываем ключ в localStorage
                 let localNews = JSON.stringify(newsObj);
                 localStorage.removeItem("news");
                 localStorage.setItem('news', localNews);
-                let newJSONnews = localStorage.getItem('news');
 
-                this.$http.post('/api', newJSONnews).then(function (response) {
+                this.sendNewsAjax(localNews);
+                event.target.reset();
+            },
+            sendNewsAjax(data) {
+                //Отправка формы ajax-запросом на сервер или перезапись локального хранилища
+                this.$http.post('/api', data).then(function (response) {
                     console.log('Фильм добавлен:', response.message);
                 }, function (response) {
                     console.log('Соединение не удалось', response.data);
-                    this.$store.commit('createNewsStorage', newJSONnews);
+                    this.$store.commit('createNewsStorage', data);
                 });
+            },
+            catchCheckbox() {
+                return this.newsItem.checked === 'ВКЛ';
             }
         },
         created() {
+            //Заполнение полей формы при инициализации системы реактивности для редактирования новости
             if (this.newsItem) {
-                this.item.title = this.newsItem.title;
-                this.item.text = this.newsItem.text;
-                this.item.img = this.newsItem.img;
-                this.item.youtube = this.newsItem.youtube;
-                this.item.status = this.newsItem.status;
-                this.item.seo.url = this.newsItem.seo.url;
-                this.item.seo.title = this.newsItem.seo.title;
+                (this.newsItem.id == 0) ? this.item.id = 'zero' : this.item.id = this.newsItem.id;
+                this.item.title = this.newsItem.data.title;
+                this.item.text = this.newsItem.data.text;
+                this.item.date = this.newsItem.data.date;
+                this.item.img = this.newsItem.data.img;
+                this.item.youtube = this.newsItem.data.youtube;
+                this.item.status = this.newsItem.data.status;
+                this.item.seo.url = this.newsItem.data.seo.url;
+                this.item.seo.title = this.newsItem.data.seo.title;
             }
         },
         components: {
-            FileUploader
+            FileUploader,
+            DatePicker
         }
     }
 </script>

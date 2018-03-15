@@ -1,3 +1,4 @@
+<!-- Родительский компонент -->
 <template>
     <div id="app">
         <!-- Main Header -->
@@ -45,7 +46,7 @@
                 //получение данных о фильмах и запись в локальное хранилище данных
                 this.$http.get('http://kino-teatr.ua:8081/services/api/film/48519?apiKey=').then(response => {
                     let serverMovies = response.body;
-                    if (localStorage.getItem('movies') !== null) {
+                    if (localStorage.getItem('movies') === null) {
                         localStorage.setItem('movies', JSON.stringify(serverMovies));
                     } else {
                         localStorage.removeItem('movies');
@@ -58,13 +59,16 @@
                     let localMovies = localStorage.getItem('movies');
                     this.movies = JSON.parse(localMovies);
                     this.$store.commit('createMovieStorage', this.movies);
+
+                    let initialMovies = localStorage.getItem('library');
+                    this.$store.commit('createMovieLib', initialMovies);
                 })
             },
             getNewsJSON: function () {
                 //получение данных с новостями
                 this.$http.get('http://kino-teatr.ua:8081/services/api/film/48519?apiKey=').then(response => {
                     let serverNews = response.body;
-                    if (localStorage.getItem('news') !== null) {
+                    if (localStorage.getItem('news') === null) {
                         localStorage.setItem('news', JSON.stringify(serverNews));
                     } else {
                         localStorage.removeItem('news');
@@ -78,8 +82,12 @@
                 })
             },
             getLocalAdminData() {
+                //Заглушка для симуляции первого подключения к серверу с получением первичных данных
                 let serverMovies = require('./store/movies.json');
                 let serverNews = require('./store/news.json');
+                if (localStorage.getItem('library') === null) {
+                    localStorage.setItem('library', JSON.stringify(serverMovies));
+                }
                 if (localStorage.getItem('movies') === null) {
                     localStorage.setItem('movies', JSON.stringify(serverMovies));
                 }

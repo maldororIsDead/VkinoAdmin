@@ -1,3 +1,4 @@
+<!-- Компонент отображения мультязычной страницы новости -->
 <template>
     <section class="content">
         <div class="row">
@@ -7,8 +8,11 @@
                         <li class=""><a href="#tab_1-1" data-toggle="tab" aria-expanded="false">Русский</a></li>
                         <li class="active"><a href="#tab_2-2" data-toggle="tab" aria-expanded="true">Украинский</a></li>
                         <li class="pull-right header">
-                            <input type="checkbox" class="checkbox" id="checkbox"/>
-                            <label class="chech-label" for="checkbox">вкл</label>
+                            <input type="checkbox" class="checkbox" id="checkbox"
+                                   true-value="ВКЛ"
+                                   false-value="ВЫКЛ"
+                                   v-model="newsItem.checked"/>
+                            <label class="check-label" for="checkbox">{{ newsItem.checked }}</label>
                         </li>
                     </ul>
                     <div class="tab-content">
@@ -36,13 +40,18 @@
         name: "news-page",
         data() {
             return {
-                newsEditArr : '',
-                newsItem: null,
+                newsEditArr: '',
+                newsItem: {
+                    data: '',
+                    id: '',
+                    checked: 'ВЫКЛ'
+                },
                 lang: [
                     {
                         newsName: "Название новости",
                         publishDate: "Дата публикации",
                         description: "Описание",
+                        date: "Выберите дату",
                         mainPic: "Главная картинка",
                         galleryPic: "Галерея картинок",
                         picSize: "Размер 1000x190",
@@ -52,6 +61,7 @@
                         newsName: "Назва новини",
                         publishDate: "Дата публікації",
                         description: "Опис",
+                        date: "Оберіть дату",
                         mainPic: "Головне зображення",
                         galleryPic: "Галерея зображень",
                         picSize: "Розмір 1000х190",
@@ -61,14 +71,14 @@
             }
         },
         created() {
+            //Получение данных по индексу новости в массиве и их реактивная отправка в поля формы
             this.newsEditArr = JSON.parse(this.news);
-            let newsId = this.$route.params.id;
-            this.newsItem = this.newsEditArr[newsId];
+            this.newsItem.id = this.$route.params.id;
+            this.newsItem.data = this.newsEditArr[this.newsItem.id];
         },
         computed: {
             ...mapGetters([
-                'news',
-                'movies'
+                'news'
             ])
         },
         components: {
@@ -95,6 +105,7 @@
         padding: 0 0 0 60px;
         cursor: pointer;
         font-weight: normal;
+        font-size: 1.4rem;
     }
 
     .checkbox + label:before {

@@ -116,7 +116,7 @@
             </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="#tml"><i class="fa fa-circle-o"></i>Выбор пользователей</a>
+                        <li><a href="#"><i class="fa fa-circle-o"></i>Выбор пользователей</a>
                         </li>
                     </ul>
                 </li>

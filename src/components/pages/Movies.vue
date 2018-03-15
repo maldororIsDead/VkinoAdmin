@@ -1,3 +1,4 @@
+<!-- Компонент отображения фильмов -->
 <template>
     <section class="content poster-movies">
         <h3 class="box-title">Cписок фильмов текущих</h3>
@@ -36,15 +37,18 @@
         name: "movies",
         computed: {
             ...mapGetters([
-                'movies'
+                'movies',
+                'moviesView'
             ]),
             moviesActual() {
+                //Сортировка массива по наличию фильма в прокате
                 return this.movies.filter(function (movie) {
                     if (movie.rentalStatus === true)
                         return movie
                 })
             },
             moviesPremiere() {
+                //Сортировка массива по предстоящим премьерам
                 return this.movies.filter(function (movie) {
                     if (movie.rentalStatus === false)
                         return movie

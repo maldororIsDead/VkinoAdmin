@@ -1,3 +1,4 @@
+<!-- Компонент панели укравления -->
 <template>
     <!-- Control Sidebar -->
     <aside class="control-sidebar control-sidebar-dark">

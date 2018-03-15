@@ -1,3 +1,4 @@
+<!-- Стартовая страница шаблона -->
 <template>
     <div class="box">
         <div class="box-header with-border">

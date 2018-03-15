@@ -1,5 +1,6 @@
+<!-- Компонент Форма добавления и редактирования фильма -->
 <template>
-    <form role="form" v-on:submit="onSubmit">
+    <form role="form" v-on:submit.prevent="onSubmit">
         <div class="col-12 col-md-6">
             <div class="row">
                 <div class="col-6 col-md-4">{{ lang.movieName }}</div>
@@ -21,16 +22,8 @@
         <div class="col-12 col-md-12">
             <div class="row">
                 <div class="col-12 col-md-2">{{ lang.mainPic }}</div>
-                <div class="col-12 col-md-3" v-if="!movie.img">
-                    <img class="news-img no-image" src="src/assets/no-image-icon.png" alt="no-image">
-                </div>
-                <div class="col-12" v-else>
-                    <img class="news-img" :src="movie.img"/>
-                </div>
-                <div class="col-8 col-md-6 movies-btn_group">
-                    <label for="file" class="btn btn-primary">загрузить фото</label>
-                    <input type="file" id="file" style="visibility:hidden;" @change="onFileChange">
-                    <button class="btn btn-default" @click="removeImage">Удалить</button>
+                <div class="col-6 col-md-10 col-lg-2">
+                    <file-uploader></file-uploader>
                 </div>
             </div>
         </div>
@@ -143,7 +136,7 @@
         <div class="col-12 col-md-12">
             <div class="form-group btn-submit">
                 <button type="submit" class="btn btn-default">Сохранить</button>
-                <button type="button" class="btn btn-primary">Вернуть базовую версию</button>
+                <button type="button" @click="getDataFromLib" class="btn btn-primary">Вернуть базовую версию</button>
             </div>
         </div>
     </form>
@@ -159,12 +152,14 @@
         data() {
             return {
                 movie: {
+                    id: '',
                     title: '',
                     description: '',
-                    src: '',
+                    src: 'src/assets/no-film.png',
                     posters: ['', '', '', '', '', ''],
                     youtube: '',
                     format: [],
+                    rentalStatus: true,
                     seo: {
                         url: '',
                         title: '',
@@ -177,44 +172,79 @@
         computed: {
             ...mapGetters([
                 'news',
-                'movies'
+                'movies',
+                'moviesLib'
             ])
         },
         created() {
+            //Заполнение полей формы при инициализации системы реактивности для редактирования фильма
             if (this.movieData) {
-                this.movie.title = this.movieData.title;
-                this.movie.description = this.movieData.description;
-                this.movie.img = this.movieData.src;
-                this.movie.youtube = this.movieData.youtube;
-                this.movie.format = this.movieData.format;
+                (this.movieData.id === 0) ? this.movie.id = 'zero' : this.movie.id = this.movieData.id;
+                this.movie.title = this.movieData.info.title;
+                this.movie.description = this.movieData.info.description;
+                this.movie.src = this.movieData.info.src;
+                this.movie.youtube = this.movieData.info.youtube;
+                this.movie.format = this.movieData.info.format;
             }
         },
         methods: {
-            onSubmit() {
-                let data = JSON.stringify(this.movie);
+            //Генерация тела запроса для формы
+            onSubmit(event) {
+                //сериализация данных формы
+                let moviesObj = this.movies;
+                let data = this.movie;
+
+                //Получение индекса элемента в массиве с заданным id для возможности его редактирования
+                if (this.movieData.id) {
+                    let index = '';
+                    for (let i = 0; i < moviesObj.length; i++) {
+                        if (moviesObj[i].id === this.movieData.id) {
+                            index = i;
+                        }
+                    }
+                    moviesObj.splice(index, 1, data);
+                } else {
+                    //Добавление нового фильма
+                    this.movie.id = this.randomInteger(1, 1000);
+                    this.movie.src = 'src/assets/no-film.png';
+                    let data = this.movie;
+                    moviesObj.push(data);
+                }
+                //Преобразуем в JSON и перезаписываем ключ в localStorage
+
+                let localMovies = JSON.stringify(moviesObj);
+                localStorage.removeItem("movies");
+                localStorage.setItem('movies', localMovies);
+                this.sendMoviesAjax(localMovies);
+                event.target.reset();
+            },
+            sendMoviesAjax(data) {
+                //Отправка формы ajax-запросом на сервер или перезапись локального хранилища фильмов
                 this.$http.post('/api', data).then(function (response) {
                     console.log('Фильм добавлен:', response.message);
                 }, function (response) {
-                    console.log('Соединение не удалось', response.data);
+                    console.log('Соединение  не удалось', response.data);
+                    this.$store.commit('createMoviesStorage', data);
                 });
             },
-            onFileChange(e) {
-                let files = e.target.files || e.dataTransfer.files;
-                if (!files.length)
-                    return;
-                this.createImage(files[0]);
-            },
-            createImage(file) {
-                let image = new Image();
-                let reader = new FileReader();
+            getDataFromLib() {
+                //Обращение к исходной локальной библиотеке для восстановления базовой версии фильма
+                let initialMovies = JSON.parse(this.moviesLib);
 
-                reader.onload = (e) => {
-                    this.image = e.target.result;
-                };
-                reader.readAsDataURL(file);
+                for (let i = 0; i < initialMovies.length; i++) {
+                    if (initialMovies[i].id === this.movie.id) {
+                        this.movie.title = initialMovies[i].title;
+                        this.movie.description = initialMovies[i].description;
+                        this.movie.src = initialMovies[i].src;
+                        this.movie.youtube = initialMovies[i].youtube;
+                        this.movie.format = initialMovies[i].format;
+                    }
+                }
             },
-            removeImage: function (e) {
-                this.image = '';
+            randomInteger(min, max) {
+                let rand = min - 0.5 + Math.random() * (max - min + 1);
+                rand = Math.round(rand);
+                return rand;
             }
         },
         components: {

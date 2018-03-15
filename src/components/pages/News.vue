@@ -1,3 +1,4 @@
+<!-- Компонент отображения новостей -->
 <template>
     <section class="content">
         <div class="row">
@@ -5,32 +6,41 @@
                 <div class="box">
                     <div class="box-header">
                         <h3 class="box-title">Cписок новостей</h3>
-                        <router-link to="/news/news-page"><button type="button" class="btn btn-default pull-right"><i class="fa fa-plus"></i> Создать
-                            Новость
-                        </button></router-link>
+                        <router-link to="/news/news-page">
+                            <button type="button" class="btn btn-default pull-right"><i class="fa fa-plus"></i> Создать
+                                Новость
+                            </button>
+                        </router-link>
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
-                        <table id="example1" class="table table-bordered table-striped">
-                            <thead>
-                            <tr>
-                                <th>Название</th>
-                                <th>Дата создания</th>
-                                <th>Статус</th>
-                                <th></th>
-                                <th></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr v-for="(item, index) in JSON.parse(news)">
-                                <td>{{ item.title }}</td>
-                                <td>{{ item.date }}</td>
-                                <td>{{ (item.status === true) ? 'ВКЛ' : 'ВЫКЛ' }}</td>
-                                <td><router-link :to="{name: 'news', params: {id: index}}"><i class="fa fa fa-pencil"></i></router-link></td>
-                                <td @click="deleteItem(index)"><i class="fa fa-trash-o"></i></td>
-                            </tr>
-                            </tbody>
-                        </table>
+                        <div class="row">
+                            <div class="col-12 col-md-12">
+                                <table id="example1" class="table table-bordered table-striped table-responsive">
+                                    <thead>
+                                    <tr>
+                                        <th class="col-xs-6">Название</th>
+                                        <th class="col-xs-3">Дата создания</th>
+                                        <th class="col-xs-1">Статус</th>
+                                        <th class="col-xs-1"></th>
+                                        <th class="col-xs-1"></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr v-for="(item, index) in JSON.parse(news)">
+                                        <td>{{ item.title }}</td>
+                                        <td>{{ item.date }}</td>
+                                        <td>{{ (item.status === true) ? 'ВКЛ' : 'ВЫКЛ' }}</td>
+                                        <td>
+                                            <router-link :to="{name: 'news', params: {id: index}}"><i
+                                                    class="fa fa fa-pencil"></i></router-link>
+                                        </td>
+                                        <td @click="deleteItem(index)"><i class="fa fa-trash-o"></i></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                     <!-- /.box-body -->
                 </div>
@@ -59,13 +69,13 @@
         },
         methods: {
             deleteItem(index) {
+                //Удаление новости
                 this.newsView = JSON.parse(this.news);
                 this.newsView.splice(index, 1);
                 let localNews = JSON.stringify(this.newsView);
                 localStorage.removeItem("news");
                 localStorage.setItem('news', localNews);
-                let newJSONnews =  localStorage.getItem('news');
-                this.$store.commit('createNewsStorage', newJSONnews);
+                this.$store.commit('createNewsStorage', localNews);
             }
         },
     }
